@@ -23,7 +23,6 @@
 </script>
 
 <style>
- /* COMPACT HEIGHT */
  :root { --seat-h: 30px; }
   body, html { height: 100dvh; overflow: hidden; touch-action: pan-y; }
  .seat {
@@ -41,22 +40,20 @@
  }
  .seat.locked-for-drag { opacity: 0.4; border: 2px dashed #6b7280; filter: grayscale(50%); }
 
- /* IMPROVED GREYED OUT STATE */
  .seat.seated-in-pool {
-     background-color: #d1d5db !important; /* Darker grey */
-     color: #1f2937 !important; /* Dark text for contrast */
+     background-color: #d1d5db !important; 
+     color: #1f2937 !important;
      border-color: #9ca3af !important;
      opacity: 0.8;
      pointer-events: none;
      cursor: not-allowed;
-     text-decoration: line-through; /* Visual indicator */
+     text-decoration: line-through;
  }
  .dark .seat.seated-in-pool {
      background-color: #4b5563 !important;
      color: #e5e7eb !important;
  }
 
- /* CONSISTENT COLORS */
  .seat.paddler, .row-paddler { background-color: #bfdbfe; color: #1e3a8a; border: 1px solid #60a5fa; }
  .dark .seat.paddler, .dark .row-paddler { background-color: #1e3a8a; color: #bfdbfe; border-color: #1d4ed8; }
  
@@ -126,6 +123,8 @@
 </head>
 <body class="bg-bg-light dark:bg-bg-dark text-gray-900 dark:text-gray-100 select-none flex flex-col">
 
+<div id="dev-bar-container"></div>
+
 <div class="flex-none shadow z-30 flex text-sm items-center justify-between p-2 relative gap-2 bg-surface-light dark:bg-surface-dark">
  <img src="https://drive.google.com/thumbnail?id=1zWXle0f60eKYSKMrlyUbfU8OyKJ_9oju&sz=h100" referrerpolicy="no-referrer" alt="Logo" class="h-10 w-auto rounded object-contain">
  <div class="flex w-full gap-1">
@@ -137,12 +136,12 @@
 </div>
 
 <div class="flex-none bg-white dark:bg-gray-900 border-b dark:border-gray-700 py-1 px-3 relative shadow-sm z-20 flex items-center justify-end h-10 gap-3">
+   <a id="sheet-link" href="#" target="_blank" class="flex-none text-[10px] font-bold px-3 py-1 rounded border transition-colors bg-white text-blue-600 border-blue-200 hover:bg-blue-50 dark:bg-gray-700 dark:text-blue-300 dark:border-gray-600 z-10 no-underline hidden">Open Sheet</a>
    <div class="flex-grow flex justify-center gap-6 text-[10px] font-bold uppercase tracking-wider">
        <div class="flex items-center gap-1.5 text-[#1e3a8a] dark:text-[#bfdbfe]"><div class="w-3 h-3 rounded-sm bg-[#bfdbfe] border border-[#60a5fa] dark:bg-[#1e3a8a] dark:border-[#1d4ed8]"></div> Paddler</div>
        <div class="flex items-center gap-1.5 text-[#14532d] dark:text-[#bbf7d0]"><div class="w-3 h-3 rounded-sm bg-[#bbf7d0] border border-[#4ade80] dark:bg-[#14532d] dark:border-[#15803d]"></div> Volunteer</div>
    </div>
    
-   <!-- REFRESH / UPDATE APP BUTTON -->
    <svg onclick="refreshAppData()" class="w-6 h-6 cursor-pointer hover:opacity-80 transition-opacity z-10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" title="Update App & Refresh Data">
         <defs>
             <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -158,6 +157,7 @@
    <button id="save-btn" onclick="executeSave()" class="flex-none text-[10px] font-bold px-3 py-1 rounded border transition-colors bg-slate-200 text-slate-800 border-slate-300 dark:bg-slate-700 dark:text-white dark:border-gray-600 z-10 cursor-pointer">Save Now</button>
 </div>
 
+<!-- (Rest of the Body HTML structure - No Changes needed here until script) -->
 <div class="flex-grow overflow-hidden relative">
 
  <!-- VIEW 1: ROSTER -->
@@ -187,7 +187,6 @@
              <button id="tab-load" onclick="switchSessionTab('load')" class="flex-1 py-2 text-xs font-bold uppercase transition-colors cursor-pointer">Load Saved</button>
          </div>
          <div class="p-2">
-             <!-- Panel: New Session -->
              <div id="panel-new" class="block">
                  <label class="block text-[10px] font-bold text-gray-500 uppercase dark:text-gray-300 mb-1">Pick Date</label>
                  <div class="flex gap-2 h-9">
@@ -198,7 +197,6 @@
                      <button onclick="createNewSession()" class="bg-blue-600 text-white px-3 rounded text-xs font-bold shadow hover:bg-blue-700 h-full cursor-pointer">CREATE & START</button>
                  </div>
              </div>
-             <!-- Panel: Load Session -->
              <div id="panel-load" class="hidden">
                  <label class="block text-[10px] font-bold text-gray-500 uppercase dark:text-gray-300 mb-1">Select File</label>
                  <div class="flex gap-2 h-9">
@@ -212,7 +210,6 @@
          </div>
      </div>
    </div>
-   <!-- Attendance -->
    <div id="attendance-section" class="flex-grow flex flex-col p-2 pt-0 min-h-0 hidden">
      <div class="bg-surface-light dark:bg-surface-dark rounded shadow border dark:border-gray-700 flex flex-col h-full overflow-hidden">
          <div class="flex text-xs font-bold uppercase">
@@ -234,7 +231,6 @@
  <!-- VIEW 3: BOATS -->
  <div id="view-planning" class="h-full flex flex-col hidden">
    <div class="flex-none z-20 shadow-sm bg-surface-light dark:bg-surface-dark pb-2">
-       <!-- NEW COUNTERS ROW -->
        <div class="bg-gray-100 dark:bg-gray-900 p-1 text-[10px] flex justify-between px-2 border-b dark:border-gray-700 font-mono">
           <div class="flex gap-3">
              <span class="text-gray-500 uppercase font-bold">Pool:</span>
@@ -249,7 +245,6 @@
        </div>
        <div class="px-2 mt-2 flex flex-col gap-2">
          <div class="flex gap-2 w-full">
-            <!-- UNDO/REDO BUTTON PLACEMENT -->
             <div class="w-1/3 flex gap-1">
                 <button id="undo-btn" onclick="performUndo()" class="flex-1 bg-orange-500 text-white py-2 rounded-l text-xs font-bold shadow cursor-pointer opacity-50 pointer-events-none transition-opacity flex items-center justify-center" title="Undo">
                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" /></svg>
@@ -281,7 +276,6 @@
  </div>
 </div>
 
-<!-- MODALS -->
 <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-60 z-50 flex flex-col items-center justify-center hidden"><div class="spinner mb-4"></div><div class="text-white font-bold text-lg tracking-wider" id="loading-text">Loading...</div></div>
 <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center z-50 p-4"><div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-full max-w-sm shadow-xl"><h3 class="font-bold text-lg mb-2 dark:text-white">Delete Member</h3><p class="text-sm text-gray-600 dark:text-gray-300 mb-6">Are you sure you want to remove <span id="delete-member-name" class="font-bold text-gray-900 dark:text-white"></span>? This action cannot be undone.</p><div class="flex justify-end gap-3"><button onclick="document.getElementById('delete-modal').classList.add('hidden')" class="px-4 py-2 rounded text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">Cancel</button><button onclick="confirmDelete()" class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 font-bold shadow">Delete</button></div></div></div>
 <div id="link-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center z-50 p-4"><div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-full max-w-sm shadow-xl text-center"><div class="text-green-500 mb-2 text-4xl">✓</div><h3 class="font-bold text-lg mb-2 dark:text-white">Image Uploaded</h3><p class="text-sm text-gray-600 dark:text-gray-300 mb-4">The boat configuration has been saved to Google Drive.</p><a id="drive-link" href="#" target="_blank" class="block w-full bg-blue-600 text-white py-2 rounded font-bold mb-3 hover:bg-blue-700 truncate px-2">Open Image</a><button onclick="document.getElementById('link-modal').classList.add('hidden')" class="w-full bg-gray-200 dark:bg-gray-700 py-2 rounded text-sm font-bold dark:text-white">Close</button></div></div>
@@ -293,14 +287,28 @@
 // ============================================
 // CONFIGURATION
 // ============================================
-// PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
+
+// 1. SET ENVIRONMENT: "DEV" OR "PROD"
+const ENV = "DEV"; 
+
+// 2. PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
 const API_URL = "https://script.google.com/macros/s/AKfycbz-VJQsQuMaq2aJ57RgV1Jz-8pvxYLcuwpdteo2-JvbWZ5kIE-14mMLgesKqWI0GFl2/exec"; 
+
+// 3. FRONTEND CONFIGURATION MAPPING
+const FRONTEND_CONFIG = {
+  PROD: {
+    SHEET_ID: "1JKHOx-53BbL3XfP1RqYQ7QLmb2vg1q_rlvnXda5ervw"
+  },
+  DEV: {
+    SHEET_ID: "11l1q5YSfAtp897hPvNgb8Ak7DXmJ6l7FJ9mV6QniEDY"
+  }
+};
 
 if (API_URL === "PASTE_YOUR_GAS_WEB_APP_URL_HERE") {
     alert("Please update the API_URL in index.html with your Google Apps Script Web App URL.");
 }
 
-// Service Worker Registration for PWA
+// Service Worker Registration
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
@@ -312,8 +320,9 @@ async function apiCall(action, data = {}) {
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
+            redirect: 'follow', // Important for GAS redirects
             body: JSON.stringify({ action: action, data: data }),
-            headers: { "Content-Type": "text/plain;charset=utf-8" } // Text/plain avoids CORS preflight issues with GAS
+            headers: { "Content-Type": "text/plain;charset=utf-8" } 
         });
         const result = await response.json();
         if (result.status === 'success') {
@@ -339,14 +348,29 @@ let currentSeatForAssign = null;
 let currentSessionDate = null;
 let draggedEl = null;
 let memberToDeleteIndex = null;
-let boatUndoStack = []; // Dedicated Undo Stack for Boats
-let boatRedoStack = []; // Dedicated Redo Stack for Boats
-let isRestoring = false; // Flag to prevent recursion
+let boatUndoStack = [];
+let boatRedoStack = [];
+let isRestoring = false;
 
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 window.onload = function() {
+ // 1. Set up Environment UI
+ const activeConfig = FRONTEND_CONFIG[ENV];
+ 
+ if (ENV === 'DEV') {
+    document.getElementById('dev-bar-container').innerHTML = 
+        '<div class="flex-none bg-red-600 text-white text-center text-xs font-bold py-1 z-50">DEV MODE</div>';
+ }
+
+ // 2. Set up Sheet Link
+ if (activeConfig && activeConfig.SHEET_ID) {
+    const link = document.getElementById('sheet-link');
+    link.href = `https://docs.google.com/spreadsheets/d/${activeConfig.SHEET_ID}`;
+    link.classList.remove('hidden');
+ }
+
  loadRoster();
  loadSessionList();
  if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
@@ -360,7 +384,6 @@ window.onbeforeunload = function() {
       return "Changes are not yet saved. Are you sure you want to leave?";
   }
 };
-
 
 /* ================= SESSION WORKFLOW UI ================= */
 function switchSessionTab(tab) {
@@ -402,8 +425,6 @@ function resetBoard() {
   updatePoolCounts();
   document.getElementById('attendance-section').classList.add('hidden');
   document.getElementById('active-session-bar').classList.add('hidden');
-  
-  // Clear Undo/Redo Stacks
   boatUndoStack = [];
   boatRedoStack = [];
   updateUndoRedoUI();
@@ -411,32 +432,23 @@ function resetBoard() {
 
 function stopAutosave() { if(autosaveTimer) { clearTimeout(autosaveTimer); autosaveTimer = null; } updateSaveButton('idle'); }
 
-/* ================= UNDO / REDO SYSTEM (BOATS ONLY) ================= */
+/* ================= UNDO / REDO SYSTEM ================= */
 function pushUndo() {
-    // Save current state
     const state = serializeState();
     boatUndoStack.push(JSON.stringify(state));
-    if (boatUndoStack.length > 20) boatUndoStack.shift(); // Limit stack size
-    
-    // CRITICAL: Clear Redo stack when a new action is performed
+    if (boatUndoStack.length > 20) boatUndoStack.shift(); 
     boatRedoStack = [];
-    
     updateUndoRedoUI();
 }
 
 function performUndo() {
     if (boatUndoStack.length === 0) return;
-    
-    // Stop pending autosave
     if(autosaveTimer) { clearTimeout(autosaveTimer); autosaveTimer = null; }
 
-    // 1. Push Current State to Redo Stack
     const currentState = serializeState();
     boatRedoStack.push(JSON.stringify(currentState));
 
-    // 2. Pop Previous State from Undo Stack
     const prevState = JSON.parse(boatUndoStack.pop());
-    
     isRestoring = true; 
     restoreState(prevState);
     isRestoring = false;
@@ -447,17 +459,12 @@ function performUndo() {
 
 function performRedo() {
     if (boatRedoStack.length === 0) return;
-
-    // Stop pending autosave
     if(autosaveTimer) { clearTimeout(autosaveTimer); autosaveTimer = null; }
 
-    // 1. Push Current State to Undo Stack
     const currentState = serializeState();
     boatUndoStack.push(JSON.stringify(currentState));
 
-    // 2. Pop Next State from Redo Stack
     const nextState = JSON.parse(boatRedoStack.pop());
-
     isRestoring = true;
     restoreState(nextState);
     isRestoring = false;
@@ -467,7 +474,6 @@ function performRedo() {
 }
 
 function updateUndoRedoUI() {
-    // Update Undo Button
     const undoBtn = document.getElementById('undo-btn');
     if (boatUndoStack.length > 0) {
         undoBtn.classList.remove('opacity-50', 'pointer-events-none');
@@ -477,7 +483,6 @@ function updateUndoRedoUI() {
         undoBtn.classList.remove('hover:bg-orange-600');
     }
 
-    // Update Redo Button
     const redoBtn = document.getElementById('redo-btn');
     if (boatRedoStack.length > 0) {
         redoBtn.classList.remove('opacity-50', 'pointer-events-none');
@@ -505,13 +510,11 @@ function createNewSession() {
           stopAutosave();
           resetBoard();
          
-          // OPTIMISTIC UI UPDATE
           currentSessionDate = dateVal;
           updateDateDisplay(dateVal);
           document.getElementById('attendance-section').classList.remove('hidden');
           hideLoading();
          
-          // Background Save
           const emptyState = { date: dateVal, attendance: [], boats: [] };
           apiCall('saveSessionToDrive', { dateStr: dateVal, jsonContent: JSON.stringify(emptyState) })
               .then(() => loadSessionList())
@@ -559,19 +562,14 @@ function updateDateDisplay(isoDate) {
   currentSessionDate = isoDate;
 }
 
-/* ================= REFRESH APP DATA (UPDATE APP LOGIC) ================= */
 function refreshAppData() {
     const btnText = document.getElementById('save-btn').innerText;
     if(autosaveTimer || btnText.includes("Saving") || btnText.includes("Waiting")) {
         if(!confirm("Saving is in progress. Reloading now might lose unsaved changes. Continue?")) return;
     }
-    
-    // UPDATE APP LOGIC: Reload the page to fetch fresh HTML/JS from GitHub
-    // This also triggers data reload on window.onload
     window.location.reload(true); 
 }
 
-/* ================= SAVE BUTTON & AUTOSAVE ================= */
 function updateSaveButton(status) {
   const btn = document.getElementById('save-btn');
   btn.disabled = false; btn.onclick = executeSave;
@@ -661,7 +659,6 @@ function restoreState(data) {
     renumberBoats();
 }
 
-/* ================= HELPER UTILS ================= */
 function sortPool() {
   const pool = document.getElementById('pool-container');
   const existingSeats = Array.from(pool.children);
@@ -799,7 +796,6 @@ function removeMemberFromSession(name) {
     updatePoolCounts();
 }
 
-/* ================= DRAG & DROP ================= */
 document.addEventListener('touchstart', function(e) {
   if(e.target.classList.contains('remove-x')) return;
   const target = e.target.closest('.seat');
@@ -888,7 +884,6 @@ function returnToPool(el) {
   if (!isRestoring) triggerAutosave();
 }
 
-/* ================= ROSTER ================= */
 function loadRoster() {
    const currentlyChecked = new Set();
    document.querySelectorAll('.att-chk:checked').forEach(c => {
