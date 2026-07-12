@@ -1,41 +1,70 @@
-const CACHE_NAME = 'dd-planner-v2'; // Increment version to force update
-const STATIC_ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png',
-  'https://cdn.tailwindcss.com'
+const CACHE_NAME = 'minds-myg-cache-v135';
+const urlsToCache = [
+'./',
+'./index.html',
+'./admin.html',
+'./tracker.html',
+'./pairing.html',
+'./grouping.html',
+'./volunteer.html',
+'./settings.html',
+'./manifest.json',
+'./frontend/css/style.css',
+'./backend/config.js',
+'./frontend/js/state.js',
+'./frontend/js/api.js',
+'./frontend/js/dnd.js',
+'./frontend/js/ui.js',
+'./frontend/js/auth.js',
+'./frontend/js/pairing.js',
+'./frontend/js/grouping.js',
+'./frontend/js/comm.js',
+'./frontend/js/volunteer.js',
+'./frontend/js/settings.js',
+'./frontend/js/main.js'
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
-  );
-  self.skipWaiting(); // Force new SW to take control immediately
+self.addEventListener('install', event => {
+self.skipWaiting();
+event.waitUntil(
+caches.open(CACHE_NAME)
+.then(cache => {
+return cache.addAll(urlsToCache);
+})
+);
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-      );
-    })
-  );
-  self.clients.claim(); // Take control of open clients
+self.addEventListener('activate', event => {
+const cacheWhitelist = [CACHE_NAME];
+event.waitUntil(
+caches.keys().then(cacheNames => {
+return Promise.all(
+cacheNames.map(cacheName => {
+if (cacheWhitelist.indexOf(cacheName) === -1) {
+return caches.delete(cacheName);
+}
+})
+);
+}).then(() => {
+return self.clients.claim();
+})
+);
 });
 
-self.addEventListener('fetch', (e) => {
-  // Strategy: Network First for HTML (to get updates), Cache First for images/styles
-  if (e.request.mode === 'navigate') {
-    e.respondWith(
-      fetch(e.request)
-        .catch(() => caches.match(e.request))
-    );
-  } else {
-    e.respondWith(
-      caches.match(e.request).then((response) => response || fetch(e.request))
-    );
-  }
+self.addEventListener('fetch', event => {
+if (event.request.method !== 'GET') return;
+
+event.respondWith(
+fetch(event.request)
+.then(networkResponse => {
+const responseClone = networkResponse.clone();
+caches.open(CACHE_NAME).then(cache => {
+cache.put(event.request, responseClone);
+});
+return networkResponse;
+})
+.catch(() => {
+return caches.match(event.request);
+})
+);
 });
